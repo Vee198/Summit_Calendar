@@ -1,0 +1,17 @@
+{
+  "name": "summit-calendar",
+  "version": "1.0.0",
+  "description": "Summit Auto Body Industry - Calendar Tracking for Executives",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create summit-calendar-db",
+    "db:init": "wrangler d1 execute summit-calendar-db --file=./schema.sql",
+    "db:init-local": "wrangler d1 execute summit-calendar-db --local --file=./schema.sql",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.78.0"
+  }
+}

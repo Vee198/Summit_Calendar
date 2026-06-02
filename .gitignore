@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Wrangler local state
+.wrangler/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temp files (Word lock files etc.)
+~$*
+
+# Empty files (accidental creation)
+cd
+conda
+npm
+
+# Python cache
+__pycache__/
+*.pyc

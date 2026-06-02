@@ -1,0 +1,31 @@
+ให้คุณสร้าง Webapp สำหรับงาน Calendar Tracking สำหรับผู้บริหารทีมบัญชี โดยรายละเอียดงานมีดังนี้
+1.ฉันอยากได้ Calendar webapp ให้ผู้บริหารดูผ่าน Website โดยฉันจะ deploy ผ่าน cloudflare
+2.มี Login system สำหรับ admin ที่ทำการแก้ไข task ต่างๆ, add task ให้ผู้บริหาร โดย User = "admin", Password = "admin"
+3.คนดูต้องมี pin สำหรับ secrue ในการเข้าดู โดยกำหนด pin = "1234" หรือถ้าคุณมองว่า pin ไม่เวิกก็ใช้ user password คุมก็ได้ ตามคุณแนะนำว่าดี, ไว, ปลอดภัย
+4.ที่สำคัญมากที่อยากได้คือ ต้อง Notice ได้ว่า งานนี้จะเริ่มในอีก 15 นาที อาจผ่าน channel, line ,whatapp, mail, sms หรือ other channel ที่คุณเห็นสมควรว่าเหมาะ ไว ดี หรือมี API ฟรีให้ใช้
+5.โทนสีขอน้ำเงิน , ขาว แบบไล่เฟดเฉดสี ให้ดูสะอาดตา
+6.ฉันมีแนบ Logo บริษัทไปด้วย ช่วยเอาไปใส่ให้หน่อย
+7.สามารถดูข้อมูล timeline แบบ digdown ได้เลยเช่น วันที่ 16/3/26 เวลา 8.30 - 10.00 :ไปกิจกรรม A, 10.00 - 12.00 : ไปกินกรรม B เป็นต้น
+8.สามารถแจ้งเตือนได้เลย กรณีถ้ากำลังสร้างตารางทับซ้อนกัน เช่น กำลังสร้างว่าวันที่ 16/3/26 เวลา 10.00 - 12.00 จะมีงานประชุม แต่วันดังกล่าวมีตารางนัดอื่นอยู่แล้ว เช่นไปพบลูกค้าเวลา 9.00 - 11.00 ซึ่งมันทับซ้อนกับ ให้แจ้งเตือน และขอ Confirm ว่ามันจะทับกันนะ ให้ฉํนทำตารางซ้อนเลยไหม เป็นต้น
+ถ้ามี Feature อื่นๆแนะนำสำหรับ Calendar tarcking ที่ควรมีเพื่อชีวิตที่ดีขึ้นสามารถแนะนำฉันได้เลย และถ้าต้องการข้อมูลเพิ่มเติมอะไรสามารถถามฉันได้เลย
+
+
+--------------------
+admin (P Tai)
+User : admin
+Pass : admin
+
+Pin : 1234
+---------------------
+binding": "summit_calendar_db",
+      "database_name": "summit-calendar-db",
+      "database_id": "405f038a-63d2-4df2-aeea-0e61e4d40803"
+
+-----------------------
+Telegram
+user = Summit_Accounting_Bot
+Use this token to access the HTTP API:8727015396:AAGFoVyB8xQ5rN3vqrmM1fToV-vT9xOLKLQ
+
+-------------
+{"ok":true,"result":[{"update_id":138103203,
+"message":{"message_id":1,"from":{"id":8549681576,"is_bot":false,"first_name":"San","last_name":"San","language_code":"th"},"chat":{"id":8549681576,"first_name":"San","last_name":"San","type":"private"},"date":1773632106,"text":"/start","entities":[{"offset":0,"length":6,"type":"bot_command"}]}}]}

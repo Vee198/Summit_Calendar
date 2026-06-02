@@ -1,0 +1,23 @@
+name = "summit-calendar"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "summit-calendar-db"
+database_id = "405f038a-63d2-4df2-aeea-0e61e4d40803"
+
+[vars]
+ADMIN_USER = "admin"
+ADMIN_PASS = "admin"
+VIEWER_PIN = ""
+TELEGRAM_BOT_TOKEN = "8727015396:AAGHsravSei_dlQk8q1HvZZ5U8oexZZWphU"
+TELEGRAM_CHAT_ID   = "8549681576,8766352693,8708044010,8725116507"
+JWT_SECRET = "summit-calendar-secret-key-change-me"
+
+[triggers]
+crons = ["*/1 * * * *"]
