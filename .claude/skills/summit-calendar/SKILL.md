@@ -199,6 +199,19 @@ The Cloudflare backend is unchanged; the app calls the same API over HTTPS.
   -> rebuild in Android Studio / Xcode.
 - Full step-by-step: see `MOBILE_BUILD_GUIDE.md` (Thai).
 
+### In-webapp "Install App" button
+
+The webapp offers install buttons on the **login screen** and in the **sidebar menu**
+(both call `pwaInstallApp()`), so users can install without finding browser menus.
+
+- Reuses the existing PWA install system: `pwaInstallApp()` in `public/index.html` (~line 5999).
+- **Android / Desktop Chrome:** native install prompt (`beforeinstallprompt`).
+  **iOS:** shows an "Add to Home Screen" guide modal (`#pwaIosModal`).
+  **Other / no prompt:** shows a generic guide modal (`#pwaGenericModal`).
+- **Store links** `PLAY_STORE_URL` / `APP_STORE_URL` (in `index.html`, ~line 5950) are empty by default.
+  After publishing to Play Store / App Store, paste the links there — the button then routes
+  users to the correct store automatically per platform (no other code changes needed).
+
 ## Backup & Restore
 
 - **Local snapshots:** `_backups/Summit_Calendar_BACKUP_YYYY-MM-DD.zip` (gitignored, not pushed).

@@ -2225,6 +2225,13 @@ body {
       </button>
       <div class="login-error" id="admin-error"></div>
     </div>
+
+    <!-- ปุ่มติดตั้งแอปบนมือถือ (แสดงทุกแท็บ) -->
+    <button type="button" onclick="pwaInstallApp()"
+      style="margin-top:18px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1px solid rgba(201,168,76,0.5);color:var(--accent,#c9a84c);border-radius:12px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;"
+      onmouseover="this.style.background='rgba(201,168,76,0.12)'" onmouseout="this.style.background='transparent'">
+      <i class="fas fa-mobile-alt"></i> ติดตั้งแอปบนมือถือ
+    </button>
   </div>
 </div>
 
@@ -2254,6 +2261,9 @@ body {
       </a>
       <a class="nav-item" onclick="showPage('timeline')" data-page="timeline">
         <i class="fas fa-stream"></i> ไทม์ไลน์
+      </a>
+      <a class="nav-item" onclick="pwaInstallApp(); closeSidebar();" style="color:var(--accent,#c9a84c);">
+        <i class="fas fa-mobile-alt"></i> ติดตั้งแอปบนมือถือ
       </a>
 
       <div class="nav-section" id="admin-nav-section" style="display:none;">จัดการ</div>
@@ -5914,10 +5924,32 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
+<!-- Generic Install Guide Modal (desktop / browsers without install prompt) -->
+<div class="pwa-ios-modal-overlay" id="pwaGenericModal">
+  <div class="pwa-ios-modal">
+    <h3><i class="fas fa-mobile-alt"></i> ติดตั้ง Summit Calendar</h3>
+    <div class="pwa-ios-step">
+      <div class="pwa-ios-step-num"><i class="fas fa-mobile-alt"></i></div>
+      <div class="pwa-ios-step-text"><b>บนมือถือ:</b> เปิดเว็บนี้ด้วย Chrome (Android) หรือ Safari (iPhone) แล้วกดปุ่ม "ติดตั้งแอป" อีกครั้ง</div>
+    </div>
+    <div class="pwa-ios-step">
+      <div class="pwa-ios-step-num"><i class="fas fa-desktop"></i></div>
+      <div class="pwa-ios-step-text"><b>บนคอมพิวเตอร์:</b> กดไอคอน <i class="fas fa-download"></i> ติดตั้ง ที่แถบ address bar ของ Chrome/Edge หรือเมนู ⋮ → "ติดตั้ง Summit Calendar"</div>
+    </div>
+    <button class="pwa-ios-close" onclick="document.getElementById('pwaGenericModal').classList.remove('show')">เข้าใจแล้ว</button>
+  </div>
+</div>
+
 <script>
 // ─── PWA Install Prompt ───────────────────────────────────────────
 let pwaInstallEvent = null;
 const PWA_DISMISS_KEY = 'summit-pwa-dismiss';
+
+// ▼▼▼ ลิงก์ร้านค้าแอป — เว้นว่างไว้จนกว่าจะเผยแพร่จริง ▼▼▼
+// เมื่อแอปขึ้น store แล้ว แค่ใส่ลิงก์ตรงนี้ ปุ่มจะพาผู้ใช้ไปร้านค้าให้อัตโนมัติ
+const PLAY_STORE_URL = '';   // เช่น 'https://play.google.com/store/apps/details?id=com.summitautobody.calendar'
+const APP_STORE_URL  = '';   // เช่น 'https://apps.apple.com/app/idXXXXXXXXX'
+// ▲▲▲ ถ้าเว้นว่าง ระบบจะใช้การติดตั้งแบบ PWA (เพิ่มลงหน้าจอโฮม) แทน ▲▲▲
 
 // Check if already installed as PWA
 function isPwaInstalled() {
@@ -5927,6 +5959,11 @@ function isPwaInstalled() {
 // Check if iOS
 function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+}
+
+// Check if Android
+function isAndroid() {
+  return /android/i.test(navigator.userAgent);
 }
 
 // Show banner with delay (don't interrupt login flow)
@@ -5958,12 +5995,22 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }, 2000);
 });
 
-// Install button click
+// Install button click (used by banner + login button + sidebar button)
 function pwaInstallApp() {
+  // 0) ติดตั้งแล้ว → แจ้งเตือนเฉย ๆ
+  if (isPwaInstalled()) {
+    if (typeof showToast === 'function') showToast('ติดตั้งแอปไว้แล้ว ✓', 'success');
+    return;
+  }
+  // 1) มีลิงก์ร้านค้า → พาไปร้านค้าตามอุปกรณ์ผู้ใช้
+  if (isIos() && APP_STORE_URL)      { window.open(APP_STORE_URL, '_blank'); return; }
+  if (isAndroid() && PLAY_STORE_URL) { window.open(PLAY_STORE_URL, '_blank'); return; }
+  // 2) iOS (ยังไม่มีลิงก์ App Store) → แสดงวิธีเพิ่มลงหน้าจอโฮม
   if (isIos()) {
     document.getElementById('pwaIosModal').classList.add('show');
     return;
   }
+  // 3) Android / Desktop ที่มี native install prompt → ติดตั้งทันที
   if (pwaInstallEvent) {
     pwaInstallEvent.prompt();
     pwaInstallEvent.userChoice.then((result) => {
@@ -5972,7 +6019,10 @@ function pwaInstallApp() {
       }
       pwaInstallEvent = null;
     });
+    return;
   }
+  // 4) ไม่มี prompt (desktop browser อื่น / เปิดจากลิงก์) → แสดงวิธีติดตั้งทั่วไป
+  document.getElementById('pwaGenericModal').classList.add('show');
 }
 
 // Dismiss banner
