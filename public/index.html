@@ -2877,7 +2877,14 @@ body {
 
 <script>
 // ===== APP STATE =====
-const API = '';
+// --- API base URL ---
+// Web (เปิดผ่าน browser/Cloudflare): ใช้ '' = same-origin
+// Mobile app (Capacitor native): ต้องชี้ไป URL production เต็ม ๆ
+// ▼▼▼ ถ้า URL จริงของคุณต่างจากนี้ แก้บรรทัดเดียวด้านล่างนี้พอ ▼▼▼
+const PROD_API_BASE = 'https://summit-calendar.workers.dev';
+// ▲▲▲ (เปิดแอปบน browser แล้วก็อป URL จาก address bar มาวาง) ▲▲▲
+const isNativeApp = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+const API = isNativeApp ? PROD_API_BASE : '';
 let authToken = '';
 let userRole = '';
 let currentDate = new Date();

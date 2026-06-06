@@ -1,0 +1,14 @@
+{
+  "appId": "com.summitautobody.calendar",
+  "appName": "Summit Calendar",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "always"
+  }
+}

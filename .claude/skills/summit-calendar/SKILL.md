@@ -32,6 +32,7 @@ for the database, and static asset hosting for the frontend.
 | Auth        | Custom JWT (2-level: Admin + PIN)   | `src/worker.js`, `src/pins.js` |
 | Notifications | Telegram Bot API                  | `src/worker.js` (sendTelegram) |
 | Config      | Wrangler                            | `wrangler.toml`                |
+| Mobile App  | Capacitor 8 (wraps `public/`)       | `capacitor.config.json`, `MOBILE_BUILD_GUIDE.md` |
 
 ## Architecture Overview
 
@@ -179,6 +180,32 @@ All in `src/worker.js`:
 Everything is in `public/index.html` — one monolithic file with HTML, CSS, and JS.
 The CSS variables are at the top (`:root { ... }`). The login screen starts around line 2118.
 The main app starts around line 2170.
+
+## Mobile App (Capacitor)
+
+The web frontend (`public/`) is packaged as native **Android + iOS** apps via Capacitor 8.
+The Cloudflare backend is unchanged; the app calls the same API over HTTPS.
+
+- **API base detection** (`public/index.html`): auto-detects native via
+  `window.Capacitor.isNativePlatform()`. On native it uses `PROD_API_BASE`
+  (production Cloudflare URL); on web it uses `''` (same-origin).
+- ⚠️ If the production URL changes, edit the single `PROD_API_BASE` line in
+  `index.html`, then run `npx cap sync`.
+- **CORS** is already `*` in `worker.js`, so the app's cross-origin API calls work.
+- **App ID:** `com.summitautobody.calendar` · **App Name:** `Summit Calendar`.
+- **First-time setup:** `npm install` -> `npx cap add android` / `npx cap add ios`
+  (iOS requires a Mac) -> `npx cap sync`.
+- **Update flow after editing web code:** `npm run deploy` -> `npx cap sync`
+  -> rebuild in Android Studio / Xcode.
+- Full step-by-step: see `MOBILE_BUILD_GUIDE.md` (Thai).
+
+## Backup & Restore
+
+- **Local snapshots:** `_backups/Summit_Calendar_BACKUP_YYYY-MM-DD.zip` (gitignored, not pushed).
+- **Git tag** `stable-backup-2026-06-06` marks the last known-good state before mobile work.
+- **GitHub `origin/main`** is a remote backup of all pushed commits.
+- **Restore options:** unzip a snapshot, OR `git checkout <tag>`, OR `git reset --hard origin/main`.
+- Prefer doing new work on a feature branch so `main` stays stable.
 
 ## Known Issues & Gotchas
 

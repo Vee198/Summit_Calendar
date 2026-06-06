@@ -20,3 +20,24 @@ npm
 # Python cache
 __pycache__/
 *.pyc
+
+# Local backup snapshots (not pushed to git)
+_backups/
+
+# ===== Mobile app (Capacitor) build artifacts =====
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.idea/
+android/app/release/
+*.apk
+*.aab
+*.keystore
+# iOS
+ios/App/Pods/
+ios/App/build/
+ios/.build/
+DerivedData/
+*.ipa
